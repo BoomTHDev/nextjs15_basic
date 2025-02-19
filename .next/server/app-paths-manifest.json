@@ -1,0 +1,7 @@
+{
+  "/page": "app/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/prisma/page": "app/prisma/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/prisma/[id]/page": "app/prisma/[id]/page.js"
+}
