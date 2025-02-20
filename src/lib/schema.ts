@@ -32,7 +32,7 @@ const VALID_DOMAINS = [
 
 // Email domain validation
 const isValidEmailDomain = (email: string) => {
-  const domain = email.split('@')[1].toLowerCase()
+  const domain = email ? email.split('@')[1].toLowerCase() : ''
   return VALID_DOMAINS.includes(domain)
 }
 
@@ -52,7 +52,7 @@ export const registerSchema = z.object({
   name: z.string()
     .optional()
     .refine(
-      (name) => name && name.length >= MIN_NAME_LENGTH,
+      (name) => !name || name.length >= MIN_NAME_LENGTH,
       { message: ERROR_MESSAGES.name }
     ),
 
