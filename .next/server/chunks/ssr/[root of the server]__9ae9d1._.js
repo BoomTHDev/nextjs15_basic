@@ -93,6 +93,7 @@ if ("TURBOPACK compile-time truthy", 1) globalForPrisma.prisma = prisma;
 var { r: __turbopack_require__, f: __turbopack_module_context__, i: __turbopack_import__, s: __turbopack_esm__, v: __turbopack_export_value__, n: __turbopack_export_namespace__, c: __turbopack_cache__, M: __turbopack_modules__, l: __turbopack_load__, j: __turbopack_dynamic__, P: __turbopack_resolve_absolute_path__, U: __turbopack_relative_url__, R: __turbopack_resolve_module_id_path__, b: __turbopack_worker_blob_url__, g: global, __dirname, x: __turbopack_external_require__, y: __turbopack_external_import__, z: __turbopack_require_stub__ } = __turbopack_context__;
 {
 __turbopack_esm__({
+    "loginSchema": (()=>loginSchema),
     "registerSchema": (()=>registerSchema)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$lib$2f$index$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/node_modules/zod/lib/index.mjs [app-rsc] (ecmascript)");
@@ -157,6 +158,14 @@ const registerSchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modu
     path: [
         'confirmPassword'
     ]
+});
+const loginSchema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$lib$2f$index$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["z"].object({
+    email: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$zod$2f$lib$2f$index$2e$mjs__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["z"].string().email({
+        message: ERROR_MESSAGES.email.format
+    }).refine((email)=>isValidEmailDomain(email), {
+        message: ERROR_MESSAGES.email.domain
+    }),
+    password: passwordSchema
 });
 }}),
 "[externals]/bcrypt [external] (bcrypt, cjs)": (function(__turbopack_context__) {
@@ -231,6 +240,7 @@ module.exports = mod;
 var { r: __turbopack_require__, f: __turbopack_module_context__, i: __turbopack_import__, s: __turbopack_esm__, v: __turbopack_export_value__, n: __turbopack_export_namespace__, c: __turbopack_cache__, M: __turbopack_modules__, l: __turbopack_load__, j: __turbopack_dynamic__, P: __turbopack_resolve_absolute_path__, U: __turbopack_relative_url__, R: __turbopack_resolve_module_id_path__, b: __turbopack_worker_blob_url__, g: global, __dirname, x: __turbopack_external_require__, y: __turbopack_external_import__, z: __turbopack_require_stub__ } = __turbopack_context__;
 {
 __turbopack_esm__({
+    "login": (()=>login),
     "register": (()=>register)
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__ = __turbopack_import__("[project]/src/lib/prisma.ts [app-rsc] (ecmascript)");
@@ -292,11 +302,56 @@ const register = async (input)=>{
             message: 'เกิดข้อผิดพลาดในการสมัครสมาชิก'
         };
     }
+};
+const login = async (input)=>{
+    try {
+        const validated = __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$schema$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["loginSchema"].safeParse(input);
+        if (!validated.success) {
+            return {
+                message: 'กรุณากรอกข้อมูลให้ถูกต้อง',
+                error: validated.error.flatten().fieldErrors
+            };
+        }
+        const existingUser = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$prisma$2e$ts__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["prisma"].user.findUnique({
+            where: {
+                email: validated.data.email
+            }
+        });
+        if (!existingUser || !await __TURBOPACK__imported__module__$5b$externals$5d2f$bcrypt__$5b$external$5d$__$28$bcrypt$2c$__cjs$29$__["default"].compare(validated.data.password, existingUser.password)) {
+            console.log('user not found');
+            return {
+                message: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง'
+            };
+        }
+        const secret = new TextEncoder().encode(process.env.JWT_SECRET_KEY);
+        const payload = {
+            id: existingUser.id
+        };
+        const token = await new __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$jose$2f$dist$2f$node$2f$esm$2f$index$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__.SignJWT(payload).setProtectedHeader({
+            alg: 'HS256'
+        }).setIssuedAt().setExpirationTime('1d') // 1 day
+        .sign(secret);
+        const cookie = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$headers$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["cookies"])();
+        cookie.set('token', token, {
+            httpOnly: true,
+            secure: ("TURBOPACK compile-time value", "development") === 'production',
+            maxAge: 60 * 60 * 24 // 1 day
+        });
+    } catch (error) {
+        console.error('Error login user:', error);
+        return {
+            message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ'
+        };
+    }
 } // register({
  //   name: 'Kob',
  //   email: 'kob555@gmail.com',
  //   password: 'Aa112233*',
  //   confirmPassword: 'Aa112233*'
+ // })
+ // login({
+ //   email: 'kob555@gmail.com',
+ //   password: 'Aa112233*'
  // })
 ;
 }}),

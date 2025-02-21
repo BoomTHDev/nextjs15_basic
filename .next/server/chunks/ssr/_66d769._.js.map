@@ -1,9 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///Users/boomthmac/Desktop/kobdemy/nextjs15-basic/src/app/server-action/page.tsx"],"sourcesContent":["import Form from 'next/form'\n\n// Server action Funciton\nconst getName = async (formData: FormData) => {\n  'use server'\n  const name = formData.get('name')\n  console.log(name)\n}\n\nconst ServerActionPage = () => {\n  return (\n    <Form action={getName}>\n      <input type='text' name='name' />\n      <button type='submit'>Submit</button>\n    </Form>\n  )\n}\nexport default ServerActionPage"],"names":[],"mappings":";;;;;;;AAAA;;;;;MAGgB,uCAGG,GAHH,uCAAV,QAAiB;IAErB,MAAM,OAAO,SAAS,GAAG,CAAC;IAC1B,QAAQ,GAAG,CAAC;AACd;AALA,yBAAyB;AACzB,MAAM,UAAU,+OAAA;AAMhB,MAAM,mBAAmB;IACvB,qBACE,8OAAC,4HAAA,CAAA,UAAI;QAAC,QAAQ;;0BACZ,8OAAC;gBAAM,MAAK;gBAAO,MAAK;;;;;;0BACxB,8OAAC;gBAAO,MAAK;0BAAS;;;;;;;;;;;;AAG5B;uCACe"}},
-    {"offset": {"line": 53, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}},
-    {"offset": {"line": 65, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":""}},
-    {"offset": {"line": 67, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
-}

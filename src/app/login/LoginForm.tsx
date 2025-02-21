@@ -1,13 +1,14 @@
 'use client'
 
 import Form from 'next/form'
-import { registerAction } from './action'
-import { useActionState, useEffect } from 'react'
 import Link from 'next/link'
+import { loginAction } from './action'
+import { useActionState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
-const RegisterForm = () => {
-  const [state, formAction, isPending] = useActionState(registerAction, null)
+const LoginForm = () => {
+
+  const [state, formAction, isPending] = useActionState(loginAction, null)
   const router = useRouter()
 
   useEffect(() => {
@@ -30,22 +31,6 @@ const RegisterForm = () => {
         gap: '10px',
       }}
     >
-      <div>
-        <input
-          type='text'
-          name='name'
-          placeholder='name'
-        />
-        {state?.errors && (
-          <p
-            style={{
-              color: 'red',
-            }}
-          >
-            {state.errors.name?.[0]}
-          </p>
-        )}
-      </div>
 
       <div>
         <input
@@ -81,32 +66,15 @@ const RegisterForm = () => {
         )}
       </div>
 
-      <div>
-        <input
-          type='password'
-          name='confirmPassword'
-          placeholder='confirm password'
-        />
-        {state?.errors && (
-          <p
-            style={{
-              color: 'red',
-            }}
-          >
-            {state.errors.confirmPassword?.[0]}
-          </p>
-        )}
-      </div>
-
       <button
         type='submit'
         disabled={isPending}
       >
-        {isPending ? 'Registering...' : 'Register'}
+        {isPending ? 'Logging...' : 'Login'}
       </button>
 
-      <Link href='/login'>Go to login</Link>
+      <Link href='/register'>Go to register</Link>
     </Form>
   )
 }
-export default RegisterForm
+export default LoginForm

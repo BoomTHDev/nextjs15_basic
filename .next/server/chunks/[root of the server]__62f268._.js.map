@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 55, "column": 0}, "map": {"version":3,"sources":["file:///Users/boomthmac/Desktop/kobdemy/nextjs15-basic/src/app/api/route.ts"],"sourcesContent":["import { NextResponse, NextRequest } from 'next/server'\n\nexport const GET = async () => {\n  return NextResponse.json({\n    message: 'Hi, Get'\n  })\n}\n\n// export const POST = async (req: NextRequest) => {\n//   const body = await req.json()\n//   return NextResponse.json(body)\n// }\n\n// export const PUT = async (req: NextRequest) => {\n//   const body = await req.json()\n//   return NextResponse.json(body)\n// }\n\n// export const DELETE = async (req: NextRequest) => {\n//   const body = await req.json()\n//   return NextResponse.json(body)\n// }"],"names":[],"mappings":";;;AAAA;;AAEO,MAAM,MAAM;IACjB,OAAO,gIAAA,CAAA,eAAY,CAAC,IAAI,CAAC;QACvB,SAAS;IACX;AACF,EAEA,oDAAoD;CACpD,kCAAkC;CAClC,mCAAmC;CACnC,IAAI;CAEJ,mDAAmD;CACnD,kCAAkC;CAClC,mCAAmC;CACnC,IAAI;CAEJ,sDAAsD;CACtD,kCAAkC;CAClC,mCAAmC;CACnC,IAAI"}},
-    {"offset": {"line": 77, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
-}
