@@ -41,8 +41,7 @@ export const middleware = async (req: NextRequest) => {
 
 export const config = {
   matcher: [
-    '/register',
-    '/login',
+    '/auth/:path*',
     '/profile'
   ]
 }
